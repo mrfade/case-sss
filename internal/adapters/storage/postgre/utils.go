@@ -39,6 +39,12 @@ func WithRequest(ctx context.Context, request *request.Request, count *int64) fu
 			}
 		}
 
+		if len(request.Searchs) > 0 {
+			for field, value := range request.Searchs {
+				db.Where(clause.Like{Column: field, Value: "%" + value + "%"})
+			}
+		}
+
 		db.Count(count)
 
 		return db

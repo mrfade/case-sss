@@ -41,7 +41,13 @@ func CaptureGinRequest(c *gin.Context) *Request {
 		}
 	}
 
-	search := c.Query("search")
+	searchs := map[string]string{}
+	searchMap := c.QueryMap("search")
+	for key, value := range searchMap {
+		if len(value) > 0 {
+			searchs[key] = value
+		}
+	}
 
 	filters := map[string]string{}
 	filterMap := c.QueryMap("filter")
@@ -56,6 +62,6 @@ func CaptureGinRequest(c *gin.Context) *Request {
 		PageSize:   pageSize,
 		Sorts:      sorts,
 		Filters:    filters,
-		Search:     search,
+		Searchs:    searchs,
 	}
 }

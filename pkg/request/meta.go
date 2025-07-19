@@ -13,7 +13,7 @@ type Request struct {
 	PageSize   int
 	Sorts      map[string]string
 	Filters    map[string]string
-	Search     string
+	Searchs    map[string]string
 }
 
 func FilterUnsupportedFields(request *Request, meta *Meta) {
@@ -30,6 +30,12 @@ func FilterUnsupportedFields(request *Request, meta *Meta) {
 	for field := range request.Sorts {
 		if !slices.Contains(meta.Sortable, field) {
 			delete(request.Sorts, field)
+		}
+	}
+
+	for field := range request.Searchs {
+		if !slices.Contains(meta.Searchable, field) {
+			delete(request.Searchs, field)
 		}
 	}
 }
