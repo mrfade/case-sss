@@ -18,7 +18,7 @@ type ContentRepository interface {
 	Delete(ctx context.Context, id int64) error
 	FindByID(ctx context.Context, id int64) (*models.Content, error)
 	FindByProviderID(ctx context.Context, provider, providerID string) (*models.Content, error)
-	FindAll(ctx context.Context, request *request.Request) ([]*models.Content, error)
+	FindAll(ctx context.Context, request *request.Request) ([]*models.Content, int64, error)
 }
 
 type ContentService interface {
@@ -26,6 +26,6 @@ type ContentService interface {
 	Update(ctx context.Context, content *models.Content) (*models.Content, error)
 	Delete(ctx context.Context, id int64) error
 	FindByID(ctx context.Context, id int64) (*models.Content, error)
-	FindAll(ctx context.Context, request *request.Request) ([]*models.Content, error)
+	FindAll(ctx context.Context, request *request.Request) ([]*models.Content, int64, error)
 	SyncContents(ctx context.Context, scorer scorer.Scorer) error
 }

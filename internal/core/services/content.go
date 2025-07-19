@@ -41,7 +41,7 @@ func (service *ContentService) Delete(ctx context.Context, id int64) error {
 	return service.repo.Delete(ctx, id)
 }
 
-func (service *ContentService) FindAll(ctx context.Context, request *request.Request) ([]*models.Content, error) {
+func (service *ContentService) FindAll(ctx context.Context, request *request.Request) ([]*models.Content, int64, error) {
 	return service.repo.FindAll(ctx, request)
 }
 

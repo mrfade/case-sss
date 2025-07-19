@@ -17,13 +17,19 @@ func NewContentHandler(service ports.ContentService) *ContentHandler {
 }
 
 func (handler *ContentHandler) FindAll(ctx *gin.Context) {
-	request := request.CaptureGinRequest(ctx)
+	req := request.CaptureGinRequest(ctx)
 
-	contents, err := handler.service.FindAll(ctx, request)
+	meta := request.Meta{
+		Filterable: []string{"type"},
+		Sortable:   []string{"score"},
+	}
+
+	contents, totalRecords, err := handler.service.FindAll(ctx, req)
 	if err != nil {
 		ctx.JSON(500, gin.H{"error": err.Error()})
 		return
 	}
 
-	ctx.JSON(200, contents)
+	pagination := NewPagination(totalRecords, req.PageNumber, req.PageSize)
+	Success(ctx, NewPaginatedResponse(contents, meta, pagination))
 }

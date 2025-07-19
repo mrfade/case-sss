@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/mrfade/case-sss/internal/core/models"
+	"github.com/mrfade/case-sss/internal/core/ports"
 	"github.com/mrfade/case-sss/pkg/request"
 )
 
@@ -11,7 +12,7 @@ type ContentRepository struct {
 	db *DB
 }
 
-func NewContentRepository(db *DB) *ContentRepository {
+func NewContentRepository(db *DB) ports.ContentRepository {
 	return &ContentRepository{
 		db,
 	}
@@ -64,17 +65,19 @@ func (repo *ContentRepository) FindByProviderID(ctx context.Context, provider, p
 	return &content, nil
 }
 
-func (repo *ContentRepository) FindAll(ctx context.Context, request *request.Request) ([]*models.Content, error) {
+func (repo *ContentRepository) FindAll(ctx context.Context, request *request.Request) ([]*models.Content, int64, error) {
 	var contents []*models.Content
-	query := repo.db.DB.WithContext(ctx).Model(&models.Content{})
+	var count int64
 
-	if request.PageNumber > 0 && request.PageSize > 0 {
-		query = query.Offset((request.PageNumber - 1) * request.PageSize).Limit(request.PageSize)
+	result := repo.db.DB.
+		WithContext(ctx).
+		Model(&models.Content{}).
+		Scopes(WithRequest(ctx, request, &count)).
+		Scan(&contents)
+
+	if result.Error != nil {
+		return nil, 0, FromGormError(result.Error)
 	}
 
-	if err := query.Find(&contents).Error; err != nil {
-		return nil, FromGormError(err)
-	}
-
-	return contents, nil
+	return contents, count, nil
 }
