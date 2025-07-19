@@ -4,11 +4,13 @@ import (
 	"context"
 	"log"
 
+	"github.com/mrfade/case-sss/internal/adapters/cache"
 	"github.com/mrfade/case-sss/internal/adapters/configs"
 	"github.com/mrfade/case-sss/internal/adapters/http"
 	"github.com/mrfade/case-sss/internal/adapters/providers/jsonprovider"
 	"github.com/mrfade/case-sss/internal/adapters/providers/xmlprovider"
 	"github.com/mrfade/case-sss/internal/adapters/storage/postgre"
+	"github.com/mrfade/case-sss/internal/adapters/storage/redis"
 	"github.com/mrfade/case-sss/internal/core/models"
 	"github.com/mrfade/case-sss/internal/core/services"
 	"github.com/mrfade/case-sss/pkg/scorer"
@@ -35,6 +37,16 @@ func main() {
 		panic(err)
 	}
 
+	// Redis Setup
+	redisClient := redis.NewClient(
+		config.Container.Redis.Host,
+		config.Container.Redis.Port,
+		config.Container.Redis.Password,
+	)
+
+	// Redis Cache
+	redisCache := cache.NewRedisCache(redisClient.ForDatabase(redis.DBCache))
+
 	// Providers
 	jsonProvider := jsonprovider.NewJSONProvider(
 		config.Container.JSONProvider.Endpoint,
@@ -50,6 +62,7 @@ func main() {
 	// Services
 	contentService := services.NewContentService(
 		contentRepo,
+		redisCache,
 		jsonProvider,
 		xmlProvider,
 	)
