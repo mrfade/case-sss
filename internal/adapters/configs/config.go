@@ -12,7 +12,6 @@ type (
 		HTTP         *HTTP
 		DB           *DB
 		Redis        *Redis
-		JWT          *JWT
 		JSONProvider *JSONProvider
 		XMLProvider  *XMLProvider
 	}
@@ -45,10 +44,6 @@ type (
 		Password string
 	}
 
-	JWT struct {
-		SecretToken string
-	}
-
 	JSONProvider struct {
 		Endpoint string
 	}
@@ -73,7 +68,6 @@ func NewConfigManager() (*ConfigManager, error) {
 			HTTP:         &HTTP{},
 			DB:           &DB{},
 			Redis:        &Redis{},
-			JWT:          &JWT{},
 			JSONProvider: &JSONProvider{},
 			XMLProvider:  &XMLProvider{},
 		},
@@ -112,9 +106,6 @@ func (C *ConfigManager) LoadConfigs() error {
 	C.Container.Redis.Password = getString("REDIS_PASS")
 	C.Container.Redis.Host = getString("REDIS_HOST")
 	C.Container.Redis.Port = getString("REDIS_PORT")
-
-	// Auth Secrets
-	C.Container.JWT.SecretToken = getString("JWT_SECRET_TOKEN")
 
 	// JSON Provider Configs
 	C.Container.JSONProvider.Endpoint = getString("JSON_PROVIDER_ENDPOINT")
