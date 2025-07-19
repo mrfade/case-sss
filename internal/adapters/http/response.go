@@ -57,12 +57,12 @@ func NewPagination(totalRecords int64, pageNumber int, pageSize int) *Pagination
 }
 
 type PaginatedResponse struct {
-	Meta       request.Meta `json:"meta"`
-	Pagination *Pagination  `json:"pagination"`
-	Items      any          `json:"items"`
+	Meta       *request.Meta `json:"meta"`
+	Pagination *Pagination   `json:"pagination"`
+	Items      any           `json:"items"`
 }
 
-func NewPaginatedResponse(data any, meta request.Meta, pagination *Pagination) *PaginatedResponse {
+func NewPaginatedResponse(data any, meta *request.Meta, pagination *Pagination) *PaginatedResponse {
 	value := reflect.ValueOf(data)
 
 	if value.Kind() == reflect.Slice && value.IsNil() {

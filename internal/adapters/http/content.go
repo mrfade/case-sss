@@ -17,12 +17,13 @@ func NewContentHandler(service ports.ContentService) *ContentHandler {
 }
 
 func (handler *ContentHandler) FindAll(ctx *gin.Context) {
-	req := request.CaptureGinRequest(ctx)
-
-	meta := request.Meta{
+	meta := &request.Meta{
 		Filterable: []string{"type"},
 		Sortable:   []string{"score"},
 	}
+
+	req := request.CaptureGinRequest(ctx)
+	request.FilterUnsupportedFields(req, meta)
 
 	contents, totalRecords, err := handler.service.FindAll(ctx, req)
 	if err != nil {
