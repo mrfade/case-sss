@@ -6,6 +6,7 @@ import (
 	"reflect"
 
 	"github.com/gin-gonic/gin"
+	"github.com/mrfade/case-sss/pkg/errors"
 	"github.com/mrfade/case-sss/pkg/request"
 )
 
@@ -27,6 +28,28 @@ func Success(ctx *gin.Context, data any) {
 		Success: true,
 		Message: "Success",
 		Data:    data,
+	})
+}
+
+var statusMap = map[error]int{
+	errors.ErrNotFound:        http.StatusNotFound,
+	errors.ErrConflictingData: http.StatusConflict,
+}
+
+func Error(ctx *gin.Context, err error) {
+	status, ok := statusMap[err]
+	if !ok {
+		status = http.StatusInternalServerError
+	}
+
+	message := err.Error()
+	if !ok {
+		message = "An unexpected error occurred"
+	}
+
+	ctx.JSON(status, Response{
+		Success: false,
+		Message: message,
 	})
 }
 
