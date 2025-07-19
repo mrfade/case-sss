@@ -2,6 +2,7 @@ package postgre
 
 import (
 	"context"
+	errs "errors"
 	"fmt"
 
 	"github.com/mrfade/case-sss/internal/adapters/configs"
@@ -46,4 +47,15 @@ func Migrate(db *gorm.DB, models ...interface{}) error {
 func (db *DB) Close() {
 	sqlDB, _ := db.DB.DB()
 	sqlDB.Close()
+}
+
+func FromGormError(err error) error {
+	switch {
+	case errs.Is(err, gorm.ErrRecordNotFound):
+		return errors.ErrNotFound
+	case errs.Is(err, gorm.ErrDuplicatedKey):
+		return errors.ErrConflictingData
+	default:
+		return err
+	}
 }
