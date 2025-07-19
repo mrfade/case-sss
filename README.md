@@ -164,3 +164,10 @@ The API returns a JSON response with the following structure:
 ## Adding New Providers
 
 To add new content providers, implement the provider interface in the `internal/adapters/providers` package.
+
+## Technology Choices
+
+- **Go**: Preferred for its simplicity, performance, and ease of building reliable APIs.
+- **PostgreSQL**: Used as a stable and widely supported relational database.
+- **Redis**: Added for basic caching to improve response times.
+- **Next.js (React + TypeScript)**: Chosen for its modern frontend stack and built-in SSR support. TypeScript improves code safety.
