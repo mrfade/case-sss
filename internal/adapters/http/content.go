@@ -28,7 +28,7 @@ func (handler *ContentHandler) FindAll(ctx *gin.Context) {
 
 	contents, totalRecords, err := handler.service.FindAll(ctx, req)
 	if err != nil {
-		ctx.JSON(500, gin.H{"error": err.Error()})
+		Error(ctx, err)
 		return
 	}
 
