@@ -35,6 +35,12 @@ func WithRequest(ctx context.Context, request *request.Request, count *int64) fu
 			})
 		}
 
+		if len(request.Filters) > 0 {
+			for field, value := range request.Filters {
+				db.Where(clause.Eq{Column: field, Value: value})
+			}
+		}
+
 		return db
 	}
 }
