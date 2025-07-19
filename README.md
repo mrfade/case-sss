@@ -41,6 +41,7 @@ The Frontend will be available at: `http://localhost:3000`
 The application runs the following services:
 
 - **App Service**: Go application (port 8080)
+- **Frontend**: Next.js application (port 3000)
 - **PostgreSQL**: Database service (port 5432)
 - **Redis**: Cache service (port 6379)
 
