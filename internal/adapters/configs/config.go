@@ -8,11 +8,13 @@ import (
 
 type (
 	Container struct {
-		App   *App
-		HTTP  *HTTP
-		DB    *DB
-		Redis *Redis
-		JWT   *JWT
+		App          *App
+		HTTP         *HTTP
+		DB           *DB
+		Redis        *Redis
+		JWT          *JWT
+		JSONProvider *JSONProvider
+		XMLProvider  *XMLProvider
 	}
 
 	App struct {
@@ -46,6 +48,14 @@ type (
 	JWT struct {
 		SecretToken string
 	}
+
+	JSONProvider struct {
+		Endpoint string
+	}
+
+	XMLProvider struct {
+		Endpoint string
+	}
 )
 
 type ConfigManager struct {
@@ -59,11 +69,13 @@ func getString(key string) string {
 func NewConfigManager() (*ConfigManager, error) {
 	manager := &ConfigManager{
 		Container: &Container{
-			App:   &App{},
-			HTTP:  &HTTP{},
-			DB:    &DB{},
-			Redis: &Redis{},
-			JWT:   &JWT{},
+			App:          &App{},
+			HTTP:         &HTTP{},
+			DB:           &DB{},
+			Redis:        &Redis{},
+			JWT:          &JWT{},
+			JSONProvider: &JSONProvider{},
+			XMLProvider:  &XMLProvider{},
 		},
 	}
 
@@ -103,6 +115,12 @@ func (C *ConfigManager) LoadConfigs() error {
 
 	// Auth Secrets
 	C.Container.JWT.SecretToken = getString("JWT_SECRET_TOKEN")
+
+	// JSON Provider Configs
+	C.Container.JSONProvider.Endpoint = getString("JSON_PROVIDER_ENDPOINT")
+
+	// XML Provider Configs
+	C.Container.XMLProvider.Endpoint = getString("XML_PROVIDER_ENDPOINT")
 
 	return nil
 }
