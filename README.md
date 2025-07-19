@@ -113,6 +113,54 @@ docker-compose down -v
 
 The service provides REST API endpoints for content management. The HTTP router is configured in [`internal/adapters/http/router.go`](internal/adapters/http/router.go).
 
+## API Documentation
+
+### GET /api/v1/contents
+
+Retrieves a paginated list of contents with support for filtering, sorting, and searching.
+
+#### Query Parameters
+
+| Parameter | Type | Description | Example |
+|-----------|------|-------------|---------|
+| `page[number]` | integer | Page number to retrieve (1-based) | `page[number]=3` |
+| `page[size]` | integer | Number of items per page | `page[size]=6` |
+| `filter[columnName]` | string | Filter results by column value | `filter[type]=article` |
+| `sort` | string | Sort by columns. Use `-` prefix for descending order | `sort=-score` |
+
+#### Example Request
+
+```
+GET /api/v1/contents?page[number]=1&page[size]=6&filter[type]=article&sort=-score
+```
+
+#### Response Format
+
+The API returns a JSON response with the following structure:
+
+```json
+{
+  "success": true,
+  "message": "Success",
+  "data": {
+    "meta": {
+      "searchable": ["title"],
+      "filterable": ["type"],
+      "sortable": ["score"],
+    },
+    "pagination": {
+      "pageNumber": 1,
+      "pageSize": 6,
+      "totalPages": 2,
+      "totalRecords": 7,
+      "hasNext": false,
+      "hasPrev": true
+    },
+    "items": []
+  }
+}
+```
+
 ## Adding New Providers
 
 To add new content providers, implement the provider interface in the `internal/adapters/providers` package.
