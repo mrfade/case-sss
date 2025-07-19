@@ -1,15 +1,26 @@
 services:
   app:
     build:
-      context: .
+      context: ./backend
       dockerfile: Dockerfile
     volumes:
-      - .:/app
+      - ./backend:/app
     ports:
       - "8080:8080"
     depends_on:
       - postgres
       - redis
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+    depends_on:
+      - app
 
   postgres:
     image: postgres:15
