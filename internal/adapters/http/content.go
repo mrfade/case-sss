@@ -20,6 +20,7 @@ func (handler *ContentHandler) FindAll(ctx *gin.Context) {
 	meta := &request.Meta{
 		Filterable: []string{"type"},
 		Sortable:   []string{"score"},
+		Searchable: []string{"title"},
 	}
 
 	req := request.CaptureGinRequest(ctx)
