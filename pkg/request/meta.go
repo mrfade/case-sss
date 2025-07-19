@@ -1,6 +1,9 @@
 package request
 
-import "slices"
+import (
+	"fmt"
+	"slices"
+)
 
 type Meta struct {
 	Searchable []string `json:"searchable,omitempty"`
@@ -14,6 +17,10 @@ type Request struct {
 	Sorts      map[string]string
 	Filters    map[string]string
 	Searchs    map[string]string
+}
+
+func (r *Request) String() string {
+	return fmt.Sprintf("%d-%d-%v-%v-%v", r.PageNumber, r.PageSize, r.Sorts, r.Filters, r.Searchs)
 }
 
 func FilterUnsupportedFields(request *Request, meta *Meta) {
