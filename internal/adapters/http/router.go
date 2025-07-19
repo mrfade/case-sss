@@ -15,6 +15,7 @@ type Router struct {
 
 func NewRouter(
 	configManager *configs.ConfigManager,
+	contentHandler *ContentHandler,
 ) (*Router, error) {
 	if configManager.IsProduction() {
 		log.Println("INFO: Running router in production mode")
@@ -34,6 +35,8 @@ func NewRouter(
 		v1.GET("/health", func(c *gin.Context) {
 			c.JSON(200, gin.H{"status": "ok"})
 		})
+
+		v1.GET("/contents", contentHandler.FindAll)
 	}
 
 	return &Router{
