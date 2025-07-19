@@ -14,11 +14,6 @@ func WithRequest(ctx context.Context, request *request.Request, count *int64) fu
 			return db
 		}
 
-		if request.PageNumber > 0 && request.PageSize > 0 {
-			offset := (request.PageNumber - 1) * request.PageSize
-			db.Offset(offset).Limit(request.PageSize)
-		}
-
 		if len(request.Sorts) > 0 {
 			columns := make([]clause.OrderByColumn, 0, len(request.Sorts))
 			for field, direction := range request.Sorts {
@@ -46,6 +41,11 @@ func WithRequest(ctx context.Context, request *request.Request, count *int64) fu
 		}
 
 		db.Count(count)
+
+		if request.PageNumber > 0 && request.PageSize > 0 {
+			offset := (request.PageNumber - 1) * request.PageSize
+			db.Offset(offset).Limit(request.PageSize)
+		}
 
 		return db
 	}
