@@ -34,6 +34,7 @@ docker-compose up --build
 ```
 
 The API will be available at: `http://localhost:8080`
+The Frontend will be available at: `http://localhost:3000`
 
 ## Docker Services
 
