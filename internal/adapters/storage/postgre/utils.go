@@ -14,8 +14,6 @@ func WithRequest(ctx context.Context, request *request.Request, count *int64) fu
 			return db
 		}
 
-		db.Count(count)
-
 		if request.PageNumber > 0 && request.PageSize > 0 {
 			offset := (request.PageNumber - 1) * request.PageSize
 			db.Offset(offset).Limit(request.PageSize)
@@ -40,6 +38,8 @@ func WithRequest(ctx context.Context, request *request.Request, count *int64) fu
 				db.Where(clause.Eq{Column: field, Value: value})
 			}
 		}
+
+		db.Count(count)
 
 		return db
 	}
