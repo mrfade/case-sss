@@ -10,7 +10,9 @@ const (
 )
 
 type Content struct {
-	ID          string      `gorm:"primaryKey"`
+	ID          int64       `gorm:"primaryKey,autoIncrement"`
+	Provider    string      `gorm:"not null"`
+	ProviderID  string      `gorm:"not null"`
 	Title       string      `gorm:"not null"`
 	Type        ContentType `gorm:"not null"`
 	Tags        []string    `gorm:"serializer:json;null"`
